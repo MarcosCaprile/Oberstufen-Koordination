@@ -1,0 +1,8 @@
+{
+    "java.project.sourcePaths": [
+        "Oberstufen Abi Koordination"
+    ],
+    "java.project.referencedLibraries": [
+        "Oberstufen Abi Koordination\\lib\\mysql-connector-j-9.6.0.jar"
+    ]
+}
