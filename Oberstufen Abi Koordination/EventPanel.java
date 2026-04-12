@@ -9,13 +9,15 @@ public class EventPanel extends JPanel {
 
     private final EventVerwaltung ev;
     private final SchuelerVerwaltung sv;
+    private final EventController controller;
 
     private final JPanel rowsPanel;
     private final JTextField sucheFeld;
 
-    public EventPanel(EventVerwaltung ev, SchuelerVerwaltung sv) {
+    public EventPanel(EventVerwaltung ev, SchuelerVerwaltung sv, EventController controller) {
         this.ev = ev;
         this.sv = sv;
+        this.controller = controller;
 
         setLayout(new BorderLayout());
         setBackground(UIStyle.BG);
@@ -200,7 +202,7 @@ public class EventPanel extends JPanel {
             if (!e.isAbgeschlossen()) {
                 String schuelerId = JOptionPane.showInputDialog(this, "Schüler-ID zum Anmelden:");
                 if (schuelerId != null && !schuelerId.trim().isEmpty()) {
-                    ev.meldeSchuelerAn(schuelerId.trim(), e.getId());
+                    controller.schuelerAnmelden(schuelerId.trim(), e.getId());
                     laden();
                 }
             }
@@ -258,7 +260,7 @@ public class EventPanel extends JPanel {
                     dialog.getPunkteWert(),
                     dialog.getMaxWert()
             );
-            ev.fuegeEventHinzu(e);
+            controller.erstelleEvent(e);
             laden();
         }
     }
@@ -272,7 +274,7 @@ public class EventPanel extends JPanel {
         dialog.setVisible(true);
 
         if (dialog.isGespeichert()) {
-            ev.bearbeiteEvent(
+            controller.bearbeiteEvent(
                     e.getId(),
                     dialog.getNameWert(),
                     dialog.getDatumWert(),
@@ -288,7 +290,7 @@ public class EventPanel extends JPanel {
     private void loescheEvent(Event e) {
         int ok = JOptionPane.showConfirmDialog(this, "Event löschen?");
         if (ok == JOptionPane.YES_OPTION) {
-            ev.loescheEvent(e.getId());
+            controller.loescheEvent(e.getId());
             laden();
         }
     }
@@ -329,17 +331,17 @@ public class EventPanel extends JPanel {
         if (result == 0) {
             String schuelerId = JOptionPane.showInputDialog(this, "Schüler-ID zum Anmelden:");
             if (schuelerId != null && !schuelerId.trim().isEmpty()) {
-                ev.meldeSchuelerAn(schuelerId.trim(), e.getId());
+                controller.schuelerAnmelden(schuelerId.trim(), e.getId());
                 laden();
             }
         } else if (result == 1) {
             String schuelerId = JOptionPane.showInputDialog(this, "Schüler-ID zum Entfernen:");
             if (schuelerId != null && !schuelerId.trim().isEmpty()) {
-                ev.verlasseEvent(schuelerId.trim(), e.getId());
+                controller.schuelerEntfernen(schuelerId.trim(), e.getId());
                 laden();
             }
         } else if (result == 2) {
-            ev.eventAbschliessen(e.getId());
+            controller.eventAbschliessen(e.getId());
             laden();
         }
     }

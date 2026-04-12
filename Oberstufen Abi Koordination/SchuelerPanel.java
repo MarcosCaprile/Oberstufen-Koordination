@@ -11,10 +11,12 @@ public class SchuelerPanel extends JPanel {
 
     private final JPanel rowsPanel;
     private final JTextField sucheFeld;
+    private final SchuelerController controller;
 
-    public SchuelerPanel(SchuelerVerwaltung sv, EventVerwaltung ev) {
+    public SchuelerPanel(SchuelerVerwaltung sv, EventVerwaltung ev, SchuelerController controller) {
         this.sv = sv;
         this.ev = ev;
+        this.controller = controller;
 
         setLayout(new BorderLayout());
         setBackground(UIStyle.BG);
@@ -188,7 +190,7 @@ public class SchuelerPanel extends JPanel {
                     dialog.getMailWert(),
                     dialog.getHandyWert()
             );
-            sv.fuegeSchuelerHinzu(s);
+            controller.erstelleSchueler(s);
             laden();
         }
     }
@@ -199,7 +201,7 @@ public class SchuelerPanel extends JPanel {
         dialog.setVisible(true);
 
         if (dialog.isGespeichert()) {
-            sv.bearbeiteSchueler(
+            controller.bearbeiteSchueler(
                     s.getId(),
                     dialog.getNameWert(),
                     dialog.getMailWert(),
@@ -217,7 +219,7 @@ public class SchuelerPanel extends JPanel {
                 JOptionPane.YES_NO_OPTION
         );
         if (ok == JOptionPane.YES_OPTION) {
-            sv.loescheSchueler(s.getId());
+            controller.loescheSchueler(s.getId());
             laden();
         }
     }

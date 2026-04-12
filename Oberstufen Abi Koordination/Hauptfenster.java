@@ -14,11 +14,18 @@ import javax.swing.*;
         private final JPanel contentPanel;
         private final Map<String, JButton> navButtons;
 
-        public Hauptfenster(SchuelerVerwaltung sv, KomiteeVerwaltung kv, EventVerwaltung ev) {
+        private final SchuelerController sc;
+        private final KomiteeController kc;
+        private final EventController ec;
+
+        public Hauptfenster(SchuelerVerwaltung sv, KomiteeVerwaltung kv, EventVerwaltung ev, SchuelerController sc, KomiteeController kc, EventController ec) {
             this.schuelerVerwaltung = sv;
             this.komiteeVerwaltung = kv;
             this.eventVerwaltung = ev;
             this.navButtons = new LinkedHashMap<>();
+            this.sc = sc;
+            this.kc = kc;
+            this.ec = ec;
 
             setTitle("Abi-Ball Planer – Verwaltungsportal");
             setSize(1280, 820);
@@ -192,18 +199,15 @@ import javax.swing.*;
         }
 
         private void zeigeSchueler() {
-            setActiveNav("Schüler");
-            zeigePanel(new SchuelerPanel(schuelerVerwaltung, eventVerwaltung));
+            zeigePanel(new SchuelerPanel(schuelerVerwaltung, eventVerwaltung, sc));
         }
 
         private void zeigeKomitees() {
-            setActiveNav("Komitees");
-            zeigePanel(new KomiteePanel(komiteeVerwaltung, schuelerVerwaltung));
+            zeigePanel(new KomiteePanel(komiteeVerwaltung, schuelerVerwaltung, kc));
         }
 
         private void zeigeEvents() {
-            setActiveNav("Events");
-            zeigePanel(new EventPanel(eventVerwaltung, schuelerVerwaltung));
+            zeigePanel(new EventPanel(eventVerwaltung, schuelerVerwaltung, ec));
         }
 
         private void switchView(JPanel newPanel) {

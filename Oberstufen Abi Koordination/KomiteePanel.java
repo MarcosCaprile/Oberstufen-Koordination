@@ -13,9 +13,12 @@ public class KomiteePanel extends JPanel {
     private final JPanel cardsPanel;
     private final JTextField sucheFeld;
 
-    public KomiteePanel(KomiteeVerwaltung kv, SchuelerVerwaltung sv) {
+    private final KomiteeController controller;
+
+    public KomiteePanel(KomiteeVerwaltung kv, SchuelerVerwaltung sv, KomiteeController controller) {
         this.kv = kv;
         this.sv = sv;
+        this.controller = controller;
 
         setLayout(new BorderLayout());
         setBackground(UIStyle.BG);
@@ -193,7 +196,7 @@ public class KomiteePanel extends JPanel {
                     dialog.getAufgabeWert(),
                     dialog.getLeiterWert()
             );
-            kv.fuegeKomiteeHinzu(k);
+            controller.erstelleKomitee(k);
             laden();
         }
     }
@@ -207,7 +210,7 @@ public class KomiteePanel extends JPanel {
         dialog.setVisible(true);
 
         if (dialog.isGespeichert()) {
-            kv.bearbeiteKomitee(
+            controller.bearbeiteKomitee(
                     k.getId(),
                     dialog.getNameWert(),
                     dialog.getTreffWert(),
@@ -221,7 +224,7 @@ public class KomiteePanel extends JPanel {
     private void loescheKomitee(Komitee k) {
         int ok = JOptionPane.showConfirmDialog(this, "Komitee löschen?");
         if (ok == JOptionPane.YES_OPTION) {
-            kv.loescheKomitee(k.getId());
+            controller.loescheKomitee(k.getId());
             laden();
         }
     }
@@ -256,13 +259,13 @@ public class KomiteePanel extends JPanel {
         if (result == 0) {
             String schuelerId = JOptionPane.showInputDialog(this, "Schüler-ID zum Hinzufügen:");
             if (schuelerId != null && !schuelerId.trim().isEmpty()) {
-                kv.trittBei(schuelerId.trim(), k.getId());
+                controller.trittBei(schuelerId.trim(), k.getId());
                 laden();
             }
         } else if (result == 1) {
             String schuelerId = JOptionPane.showInputDialog(this, "Schüler-ID zum Entfernen:");
             if (schuelerId != null && !schuelerId.trim().isEmpty()) {
-                kv.trittAus(schuelerId.trim(), k.getId());
+                controller.trittAus(schuelerId.trim(), k.getId());
                 laden();
             }
         }

@@ -17,8 +17,11 @@ public class Main {
             SchuelerVerwaltung sv = new SchuelerVerwaltung();
             KomiteeVerwaltung kv = new KomiteeVerwaltung();
             EventVerwaltung ev = new EventVerwaltung();
+            EventController ec = new EventController(ev);
+            SchuelerController sc = new SchuelerController(sv);
+            KomiteeController kc = new KomiteeController(kv);
 
-            new Hauptfenster(sv, kv, ev).setVisible(true);
+            new Hauptfenster(sv, kv, ev, sc, kc, ec).setVisible(true);
         });
     }
 }
