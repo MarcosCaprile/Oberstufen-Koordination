@@ -1,4 +1,7 @@
+// KomiteeDialog.java
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 
 public class KomiteeDialog extends JDialog {
@@ -24,15 +27,15 @@ public class KomiteeDialog extends JDialog {
         content.setBorder(UIStyle.panelPadding(22, 22, 22, 22));
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
 
-        idFeld = createField(content, "Komitee-ID");
-        nameFeld = createField(content, "Komitee-Name");
-        treffFeld = createField(content, "Treffzeiten");
-        leiterFeld = createField(content, "Leiter-ID");
+        idFeld = createField(content, "Komitee-ID", "🆔");
+        nameFeld = createField(content, "Komitee-Name", "👥");
+        treffFeld = createField(content, "Treffzeiten", "🕒");
+        leiterFeld = createField(content, "Leiter-ID", "👤");
 
-        JLabel label = new JLabel("Aufgaben");
-        label.setFont(new Font("SansSerif", Font.BOLD, 14));
-        label.setForeground(UIStyle.TEXT);
-        content.add(label);
+        JLabel aufgabeLabel = new JLabel("Aufgaben");
+        aufgabeLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+        aufgabeLabel.setForeground(UIStyle.TEXT);
+        content.add(aufgabeLabel);
         content.add(Box.createVerticalStrut(8));
 
         aufgabeArea = new JTextArea(6, 20);
@@ -40,8 +43,8 @@ public class KomiteeDialog extends JDialog {
         aufgabeArea.setWrapStyleWord(true);
         aufgabeArea.setFont(UIStyle.bodyFont());
         aufgabeArea.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(UIStyle.BORDER, 1, true),
-                BorderFactory.createEmptyBorder(12, 12, 12, 12)
+                new LineBorder(UIStyle.BORDER, 1, true),
+                new EmptyBorder(12, 12, 12, 12)
         ));
         JScrollPane areaScroll = new JScrollPane(aufgabeArea);
         areaScroll.setBorder(null);
@@ -82,24 +85,35 @@ public class KomiteeDialog extends JDialog {
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    private JTextField createField(JPanel parent, String labelText) {
+    private JTextField createField(JPanel parent, String labelText, String icon) {
         JLabel label = new JLabel(labelText);
         label.setFont(new Font("SansSerif", Font.BOLD, 14));
         label.setForeground(UIStyle.TEXT);
+        parent.add(label);
+        parent.add(Box.createVerticalStrut(8));
+
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBackground(Color.WHITE);
+        wrapper.setBorder(BorderFactory.createCompoundBorder(
+                new LineBorder(UIStyle.BORDER, 1, true),
+                new EmptyBorder(0, 0, 0, 0)
+        ));
+
+        JLabel iconLabel = new JLabel(icon);
+        iconLabel.setForeground(UIStyle.MUTED);
+        iconLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        iconLabel.setBorder(new EmptyBorder(0, 12, 0, 8));
+        wrapper.add(iconLabel, BorderLayout.WEST);
 
         JTextField field = new JTextField();
         field.setFont(UIStyle.bodyFont());
-        field.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(UIStyle.BORDER, 1, true),
-                BorderFactory.createEmptyBorder(12, 12, 12, 12)
-        ));
-        field.setMaximumSize(new Dimension(Integer.MAX_VALUE, 46));
+        field.setBorder(new EmptyBorder(12, 0, 12, 12));
+        field.setBackground(Color.WHITE);
+        wrapper.add(field, BorderLayout.CENTER);
 
-        parent.add(label);
-        parent.add(Box.createVerticalStrut(8));
-        parent.add(field);
+        wrapper.setMaximumSize(new Dimension(Integer.MAX_VALUE, 46));
+        parent.add(wrapper);
         parent.add(Box.createVerticalStrut(16));
-
         return field;
     }
 

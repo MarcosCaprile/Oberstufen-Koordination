@@ -1,4 +1,6 @@
+// Schueler.java
 public class Schueler {
+
     private String id;
     private String name;
     private String mailAdresse;

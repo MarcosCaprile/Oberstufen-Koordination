@@ -1,5 +1,4 @@
-import java.awt.Component;
-
+// Komitee.java
 public class Komitee {
 
     private String id;
@@ -50,9 +49,5 @@ public class Komitee {
 
     public void setLeiterId(String leiterId) {
         this.leiterId = leiterId;
-    }
-
-    public Component getMitglieder() {
-        throw new UnsupportedOperationException("Unimplemented method 'getMitglieder'");
     }
 }

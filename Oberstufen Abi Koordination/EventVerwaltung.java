@@ -18,11 +18,9 @@ public class EventVerwaltung {
             ps.setInt(7, e.getMaxTeilnehmer());
             ps.setBoolean(8, false);
 
-            int rows = ps.executeUpdate();
-            System.out.println("EVENT SAVED rows=" + rows);
+            ps.executeUpdate();
 
         } catch (Exception ex) {
-            System.out.println("EVENT ERROR:");
             ex.printStackTrace();
         }
     }
@@ -36,9 +34,7 @@ public class EventVerwaltung {
 
             PreparedStatement ps2 = conn.prepareStatement("DELETE FROM `event` WHERE id = ?");
             ps2.setString(1, id);
-
-            int rows = ps2.executeUpdate();
-            System.out.println("DELETE EVENT rows=" + rows);
+            ps2.executeUpdate();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -51,7 +47,6 @@ public class EventVerwaltung {
 
     public ArrayList<Event> ladeAlleEvents() {
         ArrayList<Event> list = new ArrayList<>();
-
         String sql = "SELECT * FROM `event` ORDER BY datum, uhrzeit";
 
         try (Connection conn = Database.connect();
@@ -110,7 +105,6 @@ public class EventVerwaltung {
             ResultSet rsEvent = psEvent.executeQuery();
 
             if (rsEvent.next() && rsEvent.getBoolean("abgeschlossen")) {
-                System.out.println("Event bereits abgeschlossen → Anmeldung blockiert");
                 return;
             }
 
@@ -119,7 +113,6 @@ public class EventVerwaltung {
                 ResultSet rs = psCheck.executeQuery();
 
                 if (!rs.next()) {
-                    System.out.println("Schüler nicht gefunden!");
                     return;
                 }
             }
@@ -130,7 +123,6 @@ public class EventVerwaltung {
                 ResultSet rs = exists.executeQuery();
 
                 if (rs.next()) {
-                    System.out.println("Schüler bereits angemeldet");
                     return;
                 }
             }
@@ -138,16 +130,12 @@ public class EventVerwaltung {
             try (PreparedStatement ps = conn.prepareStatement(insertSql)) {
                 ps.setString(1, schuelerId.trim());
                 ps.setString(2, eventId);
-
-                int rows = ps.executeUpdate();
-                System.out.println("Event Anmeldung rows=" + rows);
+                ps.executeUpdate();
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        
     }
 
     public void verlasseEvent(String schuelerId, String eventId) {
@@ -190,7 +178,6 @@ public class EventVerwaltung {
             ResultSet rs = psCheck.executeQuery();
 
             if (rs.next() && rs.getBoolean("abgeschlossen")) {
-                System.out.println("Event bereits abgeschlossen");
                 return;
             }
 
@@ -207,8 +194,6 @@ public class EventVerwaltung {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        
     }
 
     public int berechnePunkteFuerSchueler(String schuelerId) {
@@ -315,31 +300,28 @@ public class EventVerwaltung {
     }
 
     public void bearbeiteEvent(String id, String name, String datum, String uhrzeit, String ort, int punktzahl, int maxTeilnehmer) {
-        String sql = "UPDATE `event` SET name=?, datum=?, uhrzeit=?, ort=?, punktzahl=?, maxTeilnehmer=? WHERE id=?";
         String check = "SELECT abgeschlossen FROM `event` WHERE id=?";
+        String sql = "UPDATE `event` SET name=?, datum=?, uhrzeit=?, ort=?, punktzahl=?, maxTeilnehmer=? WHERE id=?";
 
-        
-
-        try (Connection conn = Database.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, name);
-            ps.setString(2, datum);
-            ps.setString(3, uhrzeit);
-            ps.setString(4, ort);
-            ps.setInt(5, punktzahl);
-            ps.setInt(6, maxTeilnehmer);
-            ps.setString(7, id);
-
-            ps.executeUpdate();
+        try (Connection conn = Database.connect()) {
 
             PreparedStatement psCheck = conn.prepareStatement(check);
             psCheck.setString(1, id);
             ResultSet rs = psCheck.executeQuery();
 
             if (rs.next() && rs.getBoolean("abgeschlossen")) {
-                System.out.println("Event ist abgeschlossen → Bearbeitung blockiert");
                 return;
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, name);
+                ps.setString(2, datum);
+                ps.setString(3, uhrzeit);
+                ps.setString(4, ort);
+                ps.setInt(5, punktzahl);
+                ps.setInt(6, maxTeilnehmer);
+                ps.setString(7, id);
+                ps.executeUpdate();
             }
 
         } catch (SQLException ex) {

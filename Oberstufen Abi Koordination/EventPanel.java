@@ -1,4 +1,6 @@
+// EventPanel.java
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -55,7 +57,6 @@ public class EventPanel extends JPanel {
 
         sucheFeld = UIStyle.createSearchField("Event suchen");
         sucheFeld.addActionListener(e -> laden());
-
         topCard.add(sucheFeld);
 
         content.add(topCard);
@@ -64,17 +65,17 @@ public class EventPanel extends JPanel {
         JPanel tableCard = UIStyle.createCard();
         tableCard.setLayout(new BorderLayout());
 
-        JPanel head = new JPanel(new GridLayout(1, 6));
+        JPanel head = new JPanel(new GridLayout(1, 7));
         head.setOpaque(false);
         head.setBorder(BorderFactory.createEmptyBorder(0, 0, 14, 0));
 
         head.add(createHeadLabel("ID"));
-        head.add(createHeadLabel("EVENT-NAME"));
-        head.add(createHeadLabel("DATUM & UHRZEIT"));
+        head.add(createHeadLabel("EVENT"));
+        head.add(createHeadLabel("DATUM & ZEIT"));
         head.add(createHeadLabel("PUNKTZAHL"));
         head.add(createHeadLabel("TEILNEHMER"));
-        head.add(createHeadLabel("AKTIONEN"));
         head.add(createHeadLabel("STATUS"));
+        head.add(createHeadLabel("AKTIONEN"));
 
         tableCard.add(head, BorderLayout.NORTH);
 
@@ -118,7 +119,6 @@ public class EventPanel extends JPanel {
         rowsPanel.repaint();
     }
 
-
     private JPanel createRow(Event e) {
         JPanel row = new JPanel(new GridLayout(1, 7));
         row.setBackground(Color.WHITE);
@@ -127,66 +127,73 @@ public class EventPanel extends JPanel {
                 BorderFactory.createEmptyBorder(16, 0, 16, 0)
         ));
 
-        JLabel id = new JLabel(e.getId());
-        id.setFont(new Font("SansSerif", Font.BOLD, 14));
-        id.setForeground(UIStyle.TEXT);
+        JLabel idLabel = new JLabel(e.getId());
+        idLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+        idLabel.setForeground(UIStyle.TEXT);
 
-        JLabel name = new JLabel(e.getName());
-        name.setFont(new Font("SansSerif", Font.BOLD, 14));
-        name.setForeground(UIStyle.TEXT);
+        JPanel nameCol = new JPanel();
+        nameCol.setOpaque(false);
+        nameCol.setLayout(new BoxLayout(nameCol, BoxLayout.Y_AXIS));
+        JLabel nameLabel = new JLabel(e.getName());
+        nameLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+        nameLabel.setForeground(UIStyle.TEXT);
+        JLabel ortLabel = new JLabel(e.getOrt());
+        ortLabel.setFont(UIStyle.smallFont());
+        ortLabel.setForeground(UIStyle.MUTED);
+        nameCol.add(nameLabel);
+        nameCol.add(ortLabel);
 
-        JPanel dateBox = new JPanel();
-        dateBox.setOpaque(false);
-        dateBox.setLayout(new BoxLayout(dateBox, BoxLayout.Y_AXIS));
-        dateBox.add(makeLine("📅  " + e.getDatum()));
-        dateBox.add(Box.createVerticalStrut(6));
-        dateBox.add(makeLine("🕒  " + e.getUhrzeit()));
+        JPanel datetime = new JPanel();
+        datetime.setOpaque(false);
+        datetime.setLayout(new BoxLayout(datetime, BoxLayout.Y_AXIS));
+        datetime.add(makeLine("📅  " + e.getDatum()));
+        datetime.add(Box.createVerticalStrut(6));
+        datetime.add(makeLine("🕒  " + e.getUhrzeit()));
 
-        JPanel punkte = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        punkte.setOpaque(false);
-        punkte.add(UIStyle.createChip(e.getPunktzahl() + " Punkte", new Color(243, 232, 255), UIStyle.PURPLE));
+        JPanel punkteCol = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        punkteCol.setOpaque(false);
+        punkteCol.add(UIStyle.createChip(e.getPunktzahl() + " Punkte", UIStyle.SOFT_PURPLE, UIStyle.PURPLE));
 
-        JPanel status = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        status.setOpaque(false);
+        JPanel teilnehmerCol = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        teilnehmerCol.setOpaque(false);
+        int teilnehmer = ev.getTeilnehmerAnzahl(e.getId());
+        int maxTeil = e.getMaxTeilnehmer();
+        int maxVal = maxTeil > 0 ? maxTeil : 1;
+        JProgressBar progress = new JProgressBar(0, maxVal);
+        progress.setValue(teilnehmer);
+        progress.setStringPainted(true);
+        progress.setString(teilnehmer + "/" + maxTeil);
+        progress.setForeground(UIStyle.PURPLE);
+        progress.setBackground(UIStyle.SOFT_PURPLE);
+        progress.setBorder(new LineBorder(UIStyle.SOFT_PURPLE, 1, true));
+        progress.setPreferredSize(new Dimension(100, 12));
+        teilnehmerCol.add(progress);
 
+        JPanel statusCol = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        statusCol.setOpaque(false);
         if (e.isAbgeschlossen()) {
-            status.add(UIStyle.createChip(
-                "Abgeschlossen",
-                new Color(220, 252, 231),
-                new Color(22, 163, 74)
-            ));
+            statusCol.add(UIStyle.createChip("Abgeschlossen", UIStyle.SOFT_GREEN, UIStyle.GREEN));
+        } else {
+            statusCol.add(UIStyle.createChip("Geplant", UIStyle.SOFT_ORANGE, UIStyle.ORANGE));
         }
 
-        JPanel teilnehmer = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        teilnehmer.setOpaque(false);
-        teilnehmer.add(UIStyle.createChip(
-                ev.getTeilnehmerAnzahl(e.getId()) + "/" + e.getMaxTeilnehmer(),
-                new Color(243, 232, 255),
-                UIStyle.PURPLE
-        ));
+        JPanel actionsCol = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 0));
+        actionsCol.setOpaque(false);
+        JButton anmeldenBtn = UIStyle.createIconButton("＋", UIStyle.BLUE);
+        JButton infoBtn = UIStyle.createIconButton("ⓘ", UIStyle.MUTED);
+        JButton editBtn = UIStyle.createIconButton("✎", UIStyle.PURPLE);
+        JButton deleteBtn = UIStyle.createIconButton("🗑", UIStyle.RED);
 
-        JPanel actions = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
-        actions.setOpaque(false);
-
-        JButton anmelden = UIStyle.createIconButton("+", UIStyle.BLUE);
-        JButton info = UIStyle.createIconButton("ⓘ", UIStyle.MUTED);
-        JButton edit = UIStyle.createIconButton("✎", UIStyle.PURPLE);
-        JButton delete = UIStyle.createIconButton("🗑", UIStyle.RED);
-
-        // 🔥 EVENT ABGESCHLOSSEN → ALLES SPERREN
         if (e.isAbgeschlossen()) {
-
-            anmelden.setEnabled(false);
-            edit.setEnabled(false);
-            delete.setEnabled(false);
-
-            anmelden.setForeground(Color.GRAY);
-            edit.setForeground(Color.GRAY);
-            delete.setForeground(Color.GRAY);
+            anmeldenBtn.setEnabled(false);
+            editBtn.setEnabled(false);
+            deleteBtn.setEnabled(false);
+            anmeldenBtn.setForeground(UIStyle.MUTED);
+            editBtn.setForeground(UIStyle.MUTED);
+            deleteBtn.setForeground(UIStyle.MUTED);
         }
 
-        // Aktionen
-        anmelden.addActionListener(a -> {
+        anmeldenBtn.addActionListener(a -> {
             if (!e.isAbgeschlossen()) {
                 String schuelerId = JOptionPane.showInputDialog(this, "Schüler-ID zum Anmelden:");
                 if (schuelerId != null && !schuelerId.trim().isEmpty()) {
@@ -195,32 +202,30 @@ public class EventPanel extends JPanel {
                 }
             }
         });
-
-        info.addActionListener(a -> zeigeInfos(e));
-        edit.addActionListener(a -> {
+        infoBtn.addActionListener(a -> zeigeInfos(e));
+        editBtn.addActionListener(a -> {
             if (!e.isAbgeschlossen()) {
                 bearbeiteEvent(e);
             }
         });
-        delete.addActionListener(a -> {
+        deleteBtn.addActionListener(a -> {
             if (!e.isAbgeschlossen()) {
                 loescheEvent(e);
             }
         });
 
-        actions.add(anmelden);
-        actions.add(info);
-        actions.add(edit);
-        actions.add(delete);
+        actionsCol.add(anmeldenBtn);
+        actionsCol.add(infoBtn);
+        actionsCol.add(editBtn);
+        actionsCol.add(deleteBtn);
 
-        row.add(id);
-        row.add(name);
-        row.add(dateBox);
-        row.add(punkte);
-        row.add(teilnehmer);
-        row.add(actions);
-        row.add(status);
-        row.add(actions);
+        row.add(idLabel);
+        row.add(nameCol);
+        row.add(datetime);
+        row.add(punkteCol);
+        row.add(teilnehmerCol);
+        row.add(statusCol);
+        row.add(actionsCol);
 
         return row;
     }
@@ -233,20 +238,14 @@ public class EventPanel extends JPanel {
     }
 
     private void neuesEvent() {
-        System.out.println("CLICK EVENT BUTTON");
-
         EventDialog dialog = new EventDialog(
                 SwingUtilities.getWindowAncestor(this),
                 null,
                 true
         );
-
         dialog.setVisible(true);
 
         if (dialog.isGespeichert()) {
-
-            System.out.println("DIALOG BESTÄTIGT");
-
             Event e = new Event(
                     dialog.getIdWert(),
                     dialog.getNameWert(),
@@ -256,28 +255,20 @@ public class EventPanel extends JPanel {
                     dialog.getPunkteWert(),
                     dialog.getMaxWert()
             );
-
-            System.out.println("ERSTELLT: " + e.getName());
-
             ev.fuegeEventHinzu(e);
-
             laden();
         }
     }
 
     private void bearbeiteEvent(Event e) {
-        System.out.println("Bearbeite Event: " + e.getId());
-
         EventDialog dialog = new EventDialog(
                 SwingUtilities.getWindowAncestor(this),
                 e,
                 false
         );
-
         dialog.setVisible(true);
 
         if (dialog.isGespeichert()) {
-
             ev.bearbeiteEvent(
                     e.getId(),
                     dialog.getNameWert(),
@@ -287,16 +278,12 @@ public class EventPanel extends JPanel {
                     dialog.getPunkteWert(),
                     dialog.getMaxWert()
             );
-
             laden();
         }
     }
 
     private void loescheEvent(Event e) {
-        System.out.println("Lösche Event: " + e.getId());
-
         int ok = JOptionPane.showConfirmDialog(this, "Event löschen?");
-
         if (ok == JOptionPane.YES_OPTION) {
             ev.loescheEvent(e.getId());
             laden();
@@ -306,7 +293,6 @@ public class EventPanel extends JPanel {
     private void zeigeInfos(Event e) {
         ArrayList<String> ids = ev.getTeilnehmerIds(e.getId());
         StringBuilder text = new StringBuilder();
-
         if (ids.isEmpty()) {
             text.append("Keine Teilnehmer");
         } else {

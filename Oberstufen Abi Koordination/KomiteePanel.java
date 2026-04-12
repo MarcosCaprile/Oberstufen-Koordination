@@ -1,3 +1,4 @@
+// KomiteePanel.java
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -77,11 +78,9 @@ public class KomiteePanel extends JPanel {
         String query = sucheFeld.getText().trim().toLowerCase();
 
         for (Komitee k : kv.ladeAlleKomitees()) {
-
-            if (query.isEmpty() ||
-                k.getName().toLowerCase().contains(query) ||
-                k.getId().toLowerCase().contains(query)) {
-
+            if (query.isEmpty()
+                    || k.getName().toLowerCase().contains(query)
+                    || k.getId().toLowerCase().contains(query)) {
                 cardsPanel.add(createCard(k));
             }
         }
@@ -91,7 +90,7 @@ public class KomiteePanel extends JPanel {
     }
 
     private JPanel createCard(Komitee k) {
-        JPanel card = UIStyle.createCard();
+        JPanel card = new RoundedPanel(20);
         card.setLayout(new BorderLayout());
 
         JPanel top = new JPanel(new BorderLayout());
@@ -177,17 +176,13 @@ public class KomiteePanel extends JPanel {
                 null,
                 true
         );
-
         dialog.setVisible(true);
 
         if (dialog.isGespeichert()) {
-
             String id = dialog.getIdWert();
-
             if (id == null || id.isEmpty()) {
                 id = "K" + System.currentTimeMillis();
             }
-
             Komitee k = new Komitee(
                     dialog.getIdWert(),
                     dialog.getNameWert(),
@@ -195,27 +190,20 @@ public class KomiteePanel extends JPanel {
                     dialog.getAufgabeWert(),
                     dialog.getLeiterWert()
             );
-
-            // 🔥 DAS IST DER FIX
             kv.fuegeKomiteeHinzu(k);
-
             laden();
         }
     }
 
     private void bearbeiteKomitee(Komitee k) {
-        System.out.println("Bearbeiten Komitee: " + k.getId());
-
         KomiteeDialog dialog = new KomiteeDialog(
                 SwingUtilities.getWindowAncestor(this),
                 k,
                 false
         );
-
         dialog.setVisible(true);
 
         if (dialog.isGespeichert()) {
-
             kv.bearbeiteKomitee(
                     k.getId(),
                     dialog.getNameWert(),
@@ -223,16 +211,12 @@ public class KomiteePanel extends JPanel {
                     dialog.getAufgabeWert(),
                     dialog.getLeiterWert()
             );
-
             laden();
         }
     }
 
     private void loescheKomitee(Komitee k) {
-        System.out.println("Lösche Komitee: " + k.getId());
-
         int ok = JOptionPane.showConfirmDialog(this, "Komitee löschen?");
-
         if (ok == JOptionPane.YES_OPTION) {
             kv.loescheKomitee(k.getId());
             laden();
@@ -272,9 +256,7 @@ public class KomiteePanel extends JPanel {
                 kv.trittBei(schuelerId.trim(), k.getId());
                 laden();
             }
-        }
-        
-        else if (result == 1) {
+        } else if (result == 1) {
             String schuelerId = JOptionPane.showInputDialog(this, "Schüler-ID zum Entfernen:");
             if (schuelerId != null && !schuelerId.trim().isEmpty()) {
                 kv.trittAus(schuelerId.trim(), k.getId());

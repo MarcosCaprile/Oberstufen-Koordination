@@ -53,6 +53,11 @@ public class Event {
         return abgeschlossen;
     }
 
+    // Alias, falls irgendwo im UI "istAbgeschlossen()" verwendet wird
+    public boolean istAbgeschlossen() {
+        return abgeschlossen;
+    }
+
     public void setName(String name) {
         this.name = name;
     }

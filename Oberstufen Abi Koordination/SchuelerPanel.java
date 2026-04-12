@@ -1,6 +1,6 @@
+// SchuelerPanel.java
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class SchuelerPanel extends JPanel {
 
@@ -18,12 +18,10 @@ public class SchuelerPanel extends JPanel {
         setBackground(UIStyle.BG);
         setBorder(UIStyle.panelPadding(28, 28, 28, 28));
 
-        // 🔹 MAIN CONTENT WRAPPER
         JPanel content = new JPanel();
         content.setOpaque(false);
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
 
-        // 🔹 HEADER
         JPanel header = new JPanel(new BorderLayout());
         header.setOpaque(false);
 
@@ -52,7 +50,6 @@ public class SchuelerPanel extends JPanel {
         content.add(header);
         content.add(Box.createVerticalStrut(22));
 
-        // 🔹 SEARCH BAR
         JPanel searchCard = UIStyle.createCard();
         searchCard.setLayout(new BorderLayout());
 
@@ -63,11 +60,9 @@ public class SchuelerPanel extends JPanel {
         content.add(searchCard);
         content.add(Box.createVerticalStrut(18));
 
-        // 🔹 TABLE CARD
         JPanel tableCard = UIStyle.createCard();
         tableCard.setLayout(new BorderLayout());
 
-        // HEADER ROW
         JPanel head = new JPanel(new GridLayout(1, 5));
         head.setOpaque(false);
         head.setBorder(BorderFactory.createEmptyBorder(0, 0, 14, 0));
@@ -80,7 +75,6 @@ public class SchuelerPanel extends JPanel {
 
         tableCard.add(head, BorderLayout.NORTH);
 
-        // 🔹 ROWS PANEL (WICHTIG)
         rowsPanel = new JPanel();
         rowsPanel.setOpaque(false);
         rowsPanel.setLayout(new BoxLayout(rowsPanel, BoxLayout.Y_AXIS));
@@ -94,7 +88,6 @@ public class SchuelerPanel extends JPanel {
 
         add(content, BorderLayout.CENTER);
 
-        // 🔥 INITIAL LOAD (lädt nur rowsPanel, NICHT UI)
         laden();
     }
 
@@ -111,12 +104,11 @@ public class SchuelerPanel extends JPanel {
         String suche = sucheFeld.getText().toLowerCase();
 
         for (Schueler s : sv.ladeAlleSchueler()) {
-
-            if (suche.isEmpty() ||
-                s.getName().toLowerCase().contains(suche) ||
-                s.getId().toLowerCase().contains(suche)) {
-
+            if (suche.isEmpty()
+                    || s.getName().toLowerCase().contains(suche)
+                    || s.getId().toLowerCase().contains(suche)) {
                 rowsPanel.add(createRow(s));
+                rowsPanel.add(Box.createVerticalStrut(8));
             }
         }
 
@@ -150,7 +142,7 @@ public class SchuelerPanel extends JPanel {
         JPanel punkteWrap = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         punkteWrap.setOpaque(false);
         int punkte = ev.berechnePunkteFuerSchueler(s.getId());
-        punkteWrap.add(UIStyle.createChip(punkte + " Punkte", new Color(219, 234, 254), UIStyle.BLUE));
+        punkteWrap.add(UIStyle.createChip(punkte + " Punkte", UIStyle.SOFT_PURPLE, UIStyle.PURPLE));
 
         JPanel actions = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         actions.setOpaque(false);
@@ -158,15 +150,8 @@ public class SchuelerPanel extends JPanel {
         JButton edit = UIStyle.createIconButton("✎", UIStyle.BLUE);
         JButton delete = UIStyle.createIconButton("🗑", UIStyle.RED);
 
-        edit.addActionListener(e -> {
-            System.out.println("EDIT geklickt: " + s.getId());
-            bearbeiteSchueler(s);
-        });
-
-        delete.addActionListener(e -> {
-            System.out.println("DELETE geklickt: " + s.getId());
-            loescheSchueler(s);
-        });
+        edit.addActionListener(e -> bearbeiteSchueler(s));
+        delete.addActionListener(e -> loescheSchueler(s));
 
         actions.add(edit);
         actions.add(delete);
@@ -193,22 +178,14 @@ public class SchuelerPanel extends JPanel {
         dialog.setVisible(true);
 
         if (dialog.isGespeichert()) {
-
             Schueler s = new Schueler(
-                dialog.getIdWert(),
-                dialog.getNameWert(),
-                dialog.getMailWert(),
-                dialog.getHandyWert()
+                    dialog.getIdWert(),
+                    dialog.getNameWert(),
+                    dialog.getMailWert(),
+                    dialog.getHandyWert()
             );
-
             sv.fuegeSchuelerHinzu(s);
-
-            // 🔥 DAS IST DER FIX:
-            removeAll();
-            revalidate();
-            repaint();
-
-            laden(); // lädt Daten neu aus DB
+            laden();
         }
     }
 
@@ -218,15 +195,12 @@ public class SchuelerPanel extends JPanel {
         dialog.setVisible(true);
 
         if (dialog.isGespeichert()) {
-            System.out.println("Bearbeite Schüler: " + s.getId());
-
             sv.bearbeiteSchueler(
                     s.getId(),
                     dialog.getNameWert(),
                     dialog.getMailWert(),
                     dialog.getHandyWert()
             );
-
             laden();
         }
     }
@@ -238,12 +212,8 @@ public class SchuelerPanel extends JPanel {
                 "Bestätigung",
                 JOptionPane.YES_NO_OPTION
         );
-
         if (ok == JOptionPane.YES_OPTION) {
-            System.out.println("Lösche Schüler: " + s.getId());
-
             sv.loescheSchueler(s.getId());
-
             laden();
         }
     }

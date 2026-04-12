@@ -1,12 +1,14 @@
+// Teilnahme.java
 public class Teilnahme {
+
     private String schuelerId;
     private String eventId;
-    private boolean hatTeilgenommen;
+    private boolean bestaetigt;
 
     public Teilnahme(String schuelerId, String eventId) {
         this.schuelerId = schuelerId;
         this.eventId = eventId;
-        this.hatTeilgenommen = false;
+        this.bestaetigt = false;
     }
 
     public String getSchuelerId() {
@@ -17,11 +19,11 @@ public class Teilnahme {
         return eventId;
     }
 
-    public boolean hatTeilgenommen() {
-        return hatTeilgenommen;
+    public boolean isBestaetigt() {
+        return bestaetigt;
     }
 
-    public void setHatTeilgenommen(boolean hatTeilgenommen) {
-        this.hatTeilgenommen = hatTeilgenommen;
+    public void setBestaetigt(boolean bestaetigt) {
+        this.bestaetigt = bestaetigt;
     }
 }

@@ -1,3 +1,4 @@
+// UIStyle.java
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
@@ -7,14 +8,20 @@ public class UIStyle {
     public static final Color BG = new Color(245, 247, 251);
     public static final Color SURFACE = Color.WHITE;
     public static final Color BORDER = new Color(229, 231, 235);
-    public static final Color TEXT = new Color(31, 41, 55);
-    public static final Color MUTED = new Color(107, 114, 128);
+    public static final Color TEXT = new Color(15, 23, 42);
+    public static final Color MUTED = new Color(71, 85, 105);
 
-    public static final Color BLUE = new Color(37, 99, 235);
-    public static final Color GREEN = new Color(22, 163, 74);
-    public static final Color PURPLE = new Color(147, 51, 234);
+    public static final Color BLUE = new Color(79, 70, 229);
+    public static final Color GREEN = new Color(16, 185, 129);
+    public static final Color PURPLE = new Color(124, 58, 237);
     public static final Color ORANGE = new Color(249, 115, 22);
     public static final Color RED = new Color(239, 68, 68);
+
+    public static final Color SOFT_BLUE = new Color(219, 234, 254);
+    public static final Color SOFT_GREEN = new Color(220, 252, 231);
+    public static final Color SOFT_PURPLE = new Color(233, 213, 255);
+    public static final Color SOFT_ORANGE = new Color(255, 237, 213);
+    public static final Color SOFT_RED = new Color(254, 226, 226);
 
     public static Font titleFont() {
         return new Font("SansSerif", Font.BOLD, 32);
@@ -35,7 +42,7 @@ public class UIStyle {
     public static Border cardBorder() {
         return new CompoundBorder(
                 new LineBorder(BORDER, 1, true),
-                new EmptyBorder(18, 18, 18, 18)
+                new EmptyBorder(20, 20, 20, 20)
         );
     }
 
@@ -55,6 +62,8 @@ public class UIStyle {
         button.setFocusPainted(false);
         button.setForeground(Color.WHITE);
         button.setBackground(color);
+        button.setOpaque(true);
+        button.setBorderPainted(false);
         button.setFont(new Font("SansSerif", Font.BOLD, 14));
         button.setBorder(new EmptyBorder(10, 18, 10, 18));
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -66,6 +75,7 @@ public class UIStyle {
         button.setFocusPainted(false);
         button.setForeground(TEXT);
         button.setBackground(Color.WHITE);
+        button.setOpaque(true);
         button.setFont(new Font("SansSerif", Font.BOLD, 14));
         button.setBorder(new CompoundBorder(
                 new LineBorder(BORDER, 1, true),
@@ -80,7 +90,11 @@ public class UIStyle {
         button.setFocusPainted(false);
         button.setForeground(color);
         button.setBackground(Color.WHITE);
-        button.setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
+        button.setOpaque(true);
+        button.setBorder(new CompoundBorder(
+                new LineBorder(BORDER, 1, true),
+                new EmptyBorder(4, 8, 4, 8)
+        ));
         button.setFont(new Font("SansSerif", Font.BOLD, 14));
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         return button;
