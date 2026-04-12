@@ -47,25 +47,29 @@ import javax.swing.*;
         }
 
         private JPanel createSidebar() {
-            JPanel sidebar = new JPanel();
+            JPanel sidebar = new RoundedPanel(24);
             sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
             sidebar.setBackground(Color.WHITE);
             sidebar.setBorder(new EmptyBorder(20, 8, 20, 8));
 
             // Logo
-            JLabel logo = new JLabel("AB");
-            logo.setOpaque(true);
-            logo.setBackground(UIStyle.BLUE);
-            logo.setForeground(Color.WHITE);
-            logo.setHorizontalAlignment(SwingConstants.CENTER);
-            logo.setPreferredSize(new Dimension(40, 40));
-            logo.setMaximumSize(new Dimension(40, 40));
+            ImageIcon icon = new ImageIcon(getClass().getResource("/resources/logo.png"));
+            Image img = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+            JLabel logo = new JLabel(new ImageIcon(img));
+            logo.setAlignmentX(Component.LEFT_ALIGNMENT);
+            JPanel logoWrapper = new RoundedPanel(12);
+            logoWrapper.setBackground(UIStyle.SOFT_PURPLE);
+            logoWrapper.setPreferredSize(new Dimension(48, 48));
+            logoWrapper.setMaximumSize(new Dimension(48, 48));
+            logoWrapper.setLayout(new GridBagLayout());
+
+            logoWrapper.add(logo);
 
             JLabel title = new JLabel("Abi Ball Planer");
             title.setFont(new Font("SansSerif", Font.BOLD, 16));
 
             JPanel top = new JPanel();
-            top.setLayout(new BoxLayout(top, BoxLayout.Y_AXIS));
+            top.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
             top.setOpaque(false);
             top.setAlignmentX(Component.LEFT_ALIGNMENT);
 
@@ -137,7 +141,7 @@ import javax.swing.*;
         }
 
         private JButton createSidebarButton(String text) {
-            JButton btn = new JButton(text);
+            JButton btn = new RoundedButton(text);
             btn.setFocusPainted(false);
             btn.setBackground(Color.WHITE);
             btn.setForeground(UIStyle.TEXT);
@@ -145,7 +149,9 @@ import javax.swing.*;
             btn.setHorizontalAlignment(SwingConstants.LEFT);
             btn.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-            btn.setBorder(new EmptyBorder(12, 10, 12, 10)); // 🔥 wenig left padding
+            btn.setBorder(new EmptyBorder(12, 10, 12, 10));
+            btn.setContentAreaFilled(false);
+            btn.setOpaque(false);
             btn.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
 
             return btn;

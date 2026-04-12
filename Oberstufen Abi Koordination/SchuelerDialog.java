@@ -46,7 +46,8 @@ import javax.swing.border.EmptyBorder;
 
             idFeld.setEditable(idBearbeitbar);
 
-            JPanel footer = new JPanel(new GridLayout(1, 2, 12, 0));
+            JPanel footer = new RoundedPanel(16);
+            footer.setLayout(new GridLayout(1, 2, 12, 0));
             footer.setOpaque(false);
             footer.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
@@ -64,8 +65,6 @@ import javax.swing.border.EmptyBorder;
             content.add(footer);
 
             JScrollPane scrollPane = new JScrollPane(content);
-            scrollPane.setBorder(null);
-            scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
             add(scrollPane, BorderLayout.CENTER);
         }
@@ -77,7 +76,8 @@ import javax.swing.border.EmptyBorder;
             parent.add(label);
             parent.add(Box.createVerticalStrut(8));
 
-            JPanel wrapper = new JPanel(new BorderLayout());
+            JPanel wrapper = new RoundedPanel(14);
+            wrapper.setLayout(new BorderLayout());
             wrapper.setBackground(Color.WHITE);
             wrapper.setBorder(BorderFactory.createCompoundBorder(
                     new LineBorder(UIStyle.BORDER, 1, true),

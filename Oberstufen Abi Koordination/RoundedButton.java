@@ -1,16 +1,15 @@
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-
 import java.awt.*;
 
-public class RoundedPanel extends JPanel {
+public class RoundedButton extends JButton {
 
-    private int radius;
+    private int radius = 12;
 
-    public RoundedPanel(int radius) {
-        this.radius = radius;
-        setOpaque(false);
-        setBorder(new EmptyBorder(20, 20, 20, 20));
+    public RoundedButton(String text) {
+        super(text);
+        setFocusPainted(false);
+        setBorderPainted(false);
+        setContentAreaFilled(false);
     }
 
         protected void paintComponent(Graphics g) {

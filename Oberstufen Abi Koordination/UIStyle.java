@@ -51,10 +51,40 @@ public class UIStyle {
     }
 
     public static JPanel createCard() {
-        JPanel panel = new JPanel();
-        panel.setBackground(SURFACE);
-        panel.setBorder(cardBorder());
-        return panel;
+        JPanel card = new RoundedPanel(20);
+        card.setBackground(SURFACE);
+        card.setLayout(new BorderLayout());
+        card.setBorder(new EmptyBorder(20, 20, 20, 20));
+        return card;
+    }
+
+    public static JPanel createBigActionButton(String text, Color bg, Runnable action) {
+        JPanel card = new RoundedPanel(20);
+        card.setBackground(bg);
+        card.setLayout(new GridBagLayout());
+        card.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("SansSerif", Font.BOLD, 16));
+        label.setForeground(Color.WHITE);
+
+        card.add(label);
+
+        card.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                card.setBackground(bg.darker());
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                card.setBackground(bg);
+            }
+
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                action.run();
+            }
+        });
+
+        return card;
     }
 
     public static JButton createPrimaryButton(String text, Color color) {
@@ -120,9 +150,9 @@ public class UIStyle {
     public static JTextField createSearchField(String placeholder) {
         JTextField field = new JTextField();
         field.setFont(bodyFont());
-        field.setBorder(new CompoundBorder(
-                new LineBorder(BORDER, 1, true),
-                new EmptyBorder(12, 14, 12, 14)
+        field.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(UIStyle.BORDER, 1, true),
+            new EmptyBorder(8, 12, 8, 12)
         ));
         field.setToolTipText(placeholder);
         return field;

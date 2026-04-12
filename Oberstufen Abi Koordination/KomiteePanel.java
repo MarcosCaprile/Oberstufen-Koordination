@@ -1,5 +1,7 @@
 // KomiteePanel.java
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -42,8 +44,7 @@ public class KomiteePanel extends JPanel {
         titleWrap.add(Box.createVerticalStrut(6));
         titleWrap.add(sub);
 
-        JButton neuBtn = UIStyle.createPrimaryButton("+  Neues Komitee", UIStyle.GREEN);
-        neuBtn.addActionListener(e -> neuesKomitee());
+        JPanel neuBtn = UIStyle.createBigActionButton("+ Neues Komitee", UIStyle.GREEN, this::neuesKomitee);
 
         header.add(titleWrap, BorderLayout.WEST);
         header.add(neuBtn, BorderLayout.EAST);
@@ -63,6 +64,8 @@ public class KomiteePanel extends JPanel {
         cardsPanel.setOpaque(false);
 
         JScrollPane scroll = new JScrollPane(cardsPanel);
+        scroll.getViewport().setOpaque(false);
+        scroll.setOpaque(false);
         scroll.setBorder(null);
         scroll.getViewport().setBackground(UIStyle.BG);
 

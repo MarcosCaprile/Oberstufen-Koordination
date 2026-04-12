@@ -1,5 +1,7 @@
 // SchuelerPanel.java
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 
 public class SchuelerPanel extends JPanel {
@@ -41,8 +43,7 @@ public class SchuelerPanel extends JPanel {
         titleWrap.add(Box.createVerticalStrut(6));
         titleWrap.add(sub);
 
-        JButton neuBtn = UIStyle.createPrimaryButton("+  Neuer Schüler", UIStyle.BLUE);
-        neuBtn.addActionListener(e -> neuerSchueler());
+        JPanel neuBtn = UIStyle.createBigActionButton("+ Neuer Schüler", UIStyle.BLUE, this::neuerSchueler);
 
         header.add(titleWrap, BorderLayout.WEST);
         header.add(neuBtn, BorderLayout.EAST);
@@ -80,6 +81,8 @@ public class SchuelerPanel extends JPanel {
         rowsPanel.setLayout(new BoxLayout(rowsPanel, BoxLayout.Y_AXIS));
 
         JScrollPane scroll = new JScrollPane(rowsPanel);
+        scroll.getViewport().setOpaque(false);
+        scroll.setOpaque(false);
         scroll.setBorder(null);
         scroll.getViewport().setBackground(Color.WHITE);
 
@@ -117,7 +120,8 @@ public class SchuelerPanel extends JPanel {
     }
 
     private JPanel createRow(Schueler s) {
-        JPanel row = new JPanel(new GridLayout(1, 5));
+        JPanel row = new RoundedPanel(16);
+        row.setLayout(new GridLayout(1, 5));
         row.setBackground(Color.WHITE);
         row.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(243, 244, 246)),

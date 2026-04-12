@@ -1,5 +1,6 @@
 // EventPanel.java
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.ArrayList;
@@ -43,8 +44,7 @@ public class EventPanel extends JPanel {
         titleWrap.add(Box.createVerticalStrut(6));
         titleWrap.add(sub);
 
-        JButton neuBtn = UIStyle.createPrimaryButton("+  Neues Event", UIStyle.PURPLE);
-        neuBtn.addActionListener(e -> neuesEvent());
+        JPanel neuBtn = UIStyle.createBigActionButton("+ Neues Event", UIStyle.PURPLE, this::neuesEvent);
 
         header.add(titleWrap, BorderLayout.WEST);
         header.add(neuBtn, BorderLayout.EAST);
@@ -85,6 +85,8 @@ public class EventPanel extends JPanel {
 
         JScrollPane scroll = new JScrollPane(rowsPanel);
         scroll.setBorder(null);
+        scroll.getViewport().setOpaque(false);
+        scroll.setOpaque(false);
         scroll.getViewport().setBackground(Color.WHITE);
         tableCard.add(scroll, BorderLayout.CENTER);
 
@@ -120,7 +122,8 @@ public class EventPanel extends JPanel {
     }
 
     private JPanel createRow(Event e) {
-        JPanel row = new JPanel(new GridLayout(1, 7));
+        JPanel row = new RoundedPanel(16);
+        row.setLayout(new GridLayout(1, 7));
         row.setBackground(Color.WHITE);
         row.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(243, 244, 246)),
