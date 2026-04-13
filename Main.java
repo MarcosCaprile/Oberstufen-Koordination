@@ -1,4 +1,3 @@
-// Main.java
 import java.sql.SQLException;
 
 import javax.swing.SwingUtilities;

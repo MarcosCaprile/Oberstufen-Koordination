@@ -1,14 +1,15 @@
-// Schueler.java
 public class Schueler {
 
     private String id;
-    private String name;
+    private String vorname;
+    private String nachname;
     private String mailAdresse;
     private String handynummer;
 
-    public Schueler(String id, String name, String mailAdresse, String handynummer) {
+    public Schueler(String id, String vorname, String nachname, String mailAdresse, String handynummer) {
         this.id = id;
-        this.name = name;
+        this.vorname = vorname;
+        this.nachname = nachname;
         this.mailAdresse = mailAdresse;
         this.handynummer = handynummer;
     }
@@ -17,8 +18,16 @@ public class Schueler {
         return id;
     }
 
+    public String getVorname() {
+        return vorname;
+    }
+
+    public String getNachname() {
+        return nachname;
+    }
+
     public String getName() {
-        return name;
+        return (vorname + " " + nachname).trim();
     }
 
     public String getMailAdresse() {
@@ -29,8 +38,12 @@ public class Schueler {
         return handynummer;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setVorname(String vorname) {
+        this.vorname = vorname;
+    }
+
+    public void setNachname(String nachname) {
+        this.nachname = nachname;
     }
 
     public void setMailAdresse(String mailAdresse) {

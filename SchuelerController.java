@@ -1,6 +1,6 @@
 public class SchuelerController {
 
-    private SchuelerVerwaltung sv;
+    private final SchuelerVerwaltung sv;
 
     public SchuelerController(SchuelerVerwaltung sv) {
         this.sv = sv;
@@ -14,8 +14,7 @@ public class SchuelerController {
         sv.loescheSchueler(id);
     }
 
-    public void bearbeiteSchueler(String id, String name,
-                                  String mail, String handy) {
-        sv.bearbeiteSchueler(id, name, mail, handy);
+    public void bearbeiteSchueler(String id, String vorname, String nachname, String mail, String handy) {
+        sv.bearbeiteSchueler(id, vorname, nachname, mail, handy);
     }
 }

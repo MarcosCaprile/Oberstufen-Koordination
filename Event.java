@@ -1,6 +1,6 @@
 public class Event {
 
-    private String id;
+    private final String id;
     private String name;
     private String datum;
     private String uhrzeit;

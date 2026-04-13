@@ -138,6 +138,14 @@ public class SchuelerPanel extends JPanel {
         name.setFont(new Font("SansSerif", Font.BOLD, 14));
         name.setForeground(UIStyle.TEXT);
 
+        JButton info = UIStyle.createIconButton("ⓘ", UIStyle.BLUE);
+        info.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this,
+                "Name: " + s.getName() +
+                "\nMail: " + s.getMailAdresse() +
+                "\nHandy: " + s.getHandynummer());
+        });
+
         JPanel kontakt = new JPanel();
         kontakt.setOpaque(false);
         kontakt.setLayout(new BoxLayout(kontakt, BoxLayout.Y_AXIS));
@@ -186,7 +194,8 @@ public class SchuelerPanel extends JPanel {
         if (dialog.isGespeichert()) {
             Schueler s = new Schueler(
                     dialog.getIdWert(),
-                    dialog.getNameWert(),
+                    dialog.getVornameWert(),
+                    dialog.getNachnameWert(),
                     dialog.getMailWert(),
                     dialog.getHandyWert()
             );
@@ -203,7 +212,8 @@ public class SchuelerPanel extends JPanel {
         if (dialog.isGespeichert()) {
             controller.bearbeiteSchueler(
                     s.getId(),
-                    dialog.getNameWert(),
+                    dialog.getVornameWert(),
+                    dialog.getNachnameWert(),
                     dialog.getMailWert(),
                     dialog.getHandyWert()
             );
